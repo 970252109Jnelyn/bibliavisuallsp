@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblia Visual - Lengua de Señas Peruana</title>
+    
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        darkBg: '#111827',
+                        darkCard: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Enlace a tu archivo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-darkBg dark:text-gray-100 min-h-screen flex flex-col md:flex-row">
+
+    <!-- Menú Lateral / Inferior -->
+    <nav class="bg-white dark:bg-darkCard w-full md:w-64 border-b md:border-r border-gray-200 dark:border-gray-700 p-4 flex md:flex-col justify-between fixed bottom-0 md:relative md:h-screen z-40">
+        <div>
+            <div class="hidden md:flex items-center gap-3 mb-8 text-primary dark:text-blue-400">
+                <span class="text-3xl">🤟</span>
+                <h1 class="text-xl font-bold">Biblia Visual</h1>
+            </div>
+            <ul class="flex md:flex-col justify-around md:justify-start gap-2 w-full">
+                <li><button onclick="navigate('home')" class="nav-btn w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col md:flex-row items-center gap-2"><span class="text-lg">🏠</span> <span class="text-xs md:text-base">Inicio</span></button></li>
+                <li><button onclick="navigate('reader')" class="nav-btn w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col md:flex-row items-center gap-2"><span class="text-lg">📖</span> <span class="text-xs md:text-base">Biblia</span></button></li>
+                <li><button onclick="navigate('favorites')" class="nav-btn w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col md:flex-row items-center gap-2"><span class="text-lg">💖</span> <span class="text-xs md:text-base">Favoritos</span></button></li>
+                <li><button onclick="navigate('admin')" class="nav-btn w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex flex-col md:flex-row items-center gap-2"><span class="text-lg">🎥</span> <span class="text-xs md:text-base">Videos LSP</span></button></li>
+            </ul>
+        </div>
+        <div class="hidden md:block">
+            <button onclick="navigate('settings')" class="nav-btn w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                ⚙️ Configuración
+            </button>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 overflow-y-auto relative h-screen">
+        
+        <!-- Menú de Colores (Subrayado) -->
+        <div id="highlight-menu" class="hidden">
+            <button onclick="applyHighlight('red')" class="w-6 h-6 rounded-full bg-red-300 hover:scale-110 transition-transform" aria-label="Subrayar rojo"></button>
+            <button onclick="applyHighlight('green')" class="w-6 h-6 rounded-full bg-green-300 hover:scale-110 transition-transform" aria-label="Subrayar verde"></button>
+            <button onclick="applyHighlight('pink')" class="w-6 h-6 rounded-full bg-pink-300 hover:scale-110 transition-transform" aria-label="Subrayar rosado"></button>
+            <button onclick="applyHighlight('purple')" class="w-6 h-6 rounded-full bg-purple-300 hover:scale-110 transition-transform" aria-label="Subrayar morado"></button>
+            <button onclick="applyHighlight('blue')" class="w-6 h-6 rounded-full bg-blue-300 hover:scale-110 transition-transform" aria-label="Subrayar azul"></button>
+            <button onclick="applyHighlight('gray')" class="w-6 h-6 rounded-full bg-gray-300 hover:scale-110 transition-transform" aria-label="Subrayar gris"></button>
+            <button onclick="applyHighlight('brown')" class="w-6 h-6 rounded-full bg-orange-200 hover:scale-110 transition-transform" aria-label="Subrayar marrón"></button>
+            <button onclick="removeHighlight()" class="w-6 h-6 rounded-full bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 hover:scale-110 transition-transform flex items-center justify-center" aria-label="Eliminar subrayado"><span class="text-xs">❌</span></button>
+        </div>
+
+        <!-- Vista: Inicio -->
+        <section id="view-home" class="view-section">
+            <div class="max-w-4xl mx-auto text-center mt-10">
+                <div class="text-6xl mb-6">🤟</div>
+                <h2 class="text-4xl font-bold mb-4">Bienvenido a Biblia Visual</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">La Palabra de Dios adaptada y accesible en Lengua de Señas Peruana.</p>
+                <button onclick="navigate('reader')" class="bg-primary hover:bg-secondary text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg transition-colors">
+                    Comenzar a Leer
+                </button>
+            </div>
+        </section>
+
+        <!-- Vista: Lector y Video -->
+        <section id="view-reader" class="view-section hidden">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-6 flex flex-wrap gap-4 items-center justify-between">
+                        <select id="verse-selector" onchange="loadSelectedVerse()" class="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-lg focus:ring-primary focus:border-primary">
+                            <option value="3juan-1-14">3 Juan 1:14</option>
+                            <option value="judas-1-25">Judas 1:25</option>
+                        </select>
+                        <select id="translation-selector" onchange="loadSelectedVerse()" class="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2 focus:ring-primary focus:border-primary">
+                            <option value="simplificado">Español Simplificado</option>
+                            <option value="ntv">NTV</option>
+                            <option value="rvr1960">RVR1960</option>
+                        </select>
+                    </div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 relative">
+                        <button onclick="toggleFavorite()" id="btn-favorite" class="absolute top-4 right-4 text-2xl" aria-label="Agregar a favoritos">🤍</button>
+                        <h3 id="verse-title" class="text-2xl font-bold mb-4 text-primary dark:text-blue-400">Cargando...</h3>
+                        <div id="verse-content" class="text-md-custom leading-relaxed verse-text mb-6"></div>
+                        <button onclick="copyVerse()" class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-blue-400 mt-4 font-semibold">
+                            📋 Copiar texto
+                        </button>
+                    </div>
+                </div>
+                <div class="video-container">
+                    <div class="bg-white dark:bg-darkCard p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">▶️ Video en LSP</h3>
+                        <div id="video-wrapper" class="w-full aspect-video bg-black rounded-lg overflow-hidden relative flex items-center justify-center"></div>
+                        <div id="video-controls" class="mt-4 flex justify-center gap-4 hidden">
+                            <button onclick="reloadVideo()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-4 py-2 rounded-lg font-bold flex items-center gap-2">
+                                🔄 Volver a reproducir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vista: Panel de Administración -->
+        <section id="view-admin" class="view-section hidden">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 border-b pb-2 dark:border-gray-700">🎥 Gestión de Videos YouTube</h2>
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
+                    <h3 class="text-xl font-bold mb-4">Registrar Nuevo Video</h3>
+                    <form id="admin-video-form" onsubmit="saveVideoLink(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-1">Libro</label>
+                            <select id="admin-book" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2" required>
+                                <option value="3juan">3 Juan</option>
+                                <option value="judas">Judas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-1">Capítulo</label>
+                            <input type="number" id="admin-chapter" min="1" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-1">Versículo</label>
+                            <input type="number" id="admin-verse" min="1" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2" required>
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-bold mb-1">Enlace de YouTube</label>
+                            <input type="text" id="admin-url" placeholder="Ej: https://www.youtube.com/watch?v=..." class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-2" required>
+                        </div>
+                        <div class="md:col-span-1 flex items-end">
+                            <button type="submit" class="w-full bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded-lg">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-bold mb-4">Videos Registrados</h3>
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-800">
+                                <th class="p-3 border-b dark:border-gray-700">Referencia</th>
+                                <th class="p-3 border-b dark:border-gray-700">ID YouTube</th>
+                                <th class="p-3 border-b dark:border-gray-700 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="video-list-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vista: Favoritos -->
+        <section id="view-favorites" class="view-section hidden">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 border-b pb-2 dark:border-gray-700">💖 Mis Favoritos</h2>
+                <div id="favorites-container" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </section>
+
+        <!-- Vista: Configuración -->
+        <section id="view-settings" class="view-section hidden">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 border-b pb-2 dark:border-gray-700">⚙️ Configuración</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold mb-4">👤 Cuenta de Usuario</h3>
+                        <div id="auth-status-logged-out">
+                            <button onclick="toggleAuth(true)" class="w-full bg-white text-gray-800 border border-gray-300 font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center gap-3">
+                                🌐 Iniciar sesión con Google
+                            </button>
+                        </div>
+                        <div id="auth-status-logged-in" class="hidden">
+                            <button onclick="toggleAuth(false)" class="w-full bg-red-100 text-red-600 font-bold py-2 px-4 rounded-lg hover:bg-red-200">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-xl font-bold mb-4">Accesibilidad Visual</h3>
+                        <div class="mb-6">
+                            <label class="block font-bold mb-2">Tema</label>
+                            <div class="flex gap-4">
+                                <button onclick="setTheme('light')" class="flex-1 py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg">Claro</button>
+                                <button onclick="setTheme('dark')" class="flex-1 py-2 px-4 bg-gray-800 text-white rounded-lg">Oscuro</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-2">Tamaño de letra</label>
+                            <div class="flex gap-4">
+                                <button onclick="setTextSize('text-sm-custom')" class="flex-1 py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm">Pequeño</button>
+                                <button onclick="setTextSize('text-md-custom')" class="flex-1 py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-base">Mediano</button>
+                                <button onclick="setTextSize('text-lg-custom')" class="flex-1 py-2 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-lg font-bold">Grande</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Enlace a tu archivo JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

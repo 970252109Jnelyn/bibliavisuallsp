@@ -1,0 +1,49 @@
+/* Estilos personalizados y utilidades de accesibilidad */
+body { 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.text-sm-custom { font-size: 1rem; }
+.text-md-custom { font-size: 1.25rem; }
+.text-lg-custom { font-size: 1.5rem; }
+
+/* Sistema de Subrayado - Modo Claro */
+.highlight-red { background-color: #fca5a5; color: #7f1d1d; }
+.highlight-green { background-color: #86efac; color: #14532d; }
+.highlight-pink { background-color: #f9a8d4; color: #831843; }
+.highlight-purple { background-color: #d8b4fe; color: #581c87; }
+.highlight-blue { background-color: #93c5fd; color: #1e3a8a; }
+.highlight-gray { background-color: #d1d5db; color: #1f2937; }
+.highlight-brown { background-color: #d6d3d1; color: #44403c; }
+
+/* Sistema de Subrayado - Modo Oscuro */
+.dark .highlight-red { background-color: #7f1d1d; color: #fca5a5; }
+.dark .highlight-green { background-color: #14532d; color: #86efac; }
+.dark .highlight-pink { background-color: #831843; color: #f9a8d4; }
+.dark .highlight-purple { background-color: #581c87; color: #d8b4fe; }
+.dark .highlight-blue { background-color: #1e3a8a; color: #93c5fd; }
+.dark .highlight-gray { background-color: #374151; color: #e5e7eb; }
+.dark .highlight-brown { background-color: #44403c; color: #e7e5e4; }
+
+/* Pop-up de colores para el subrayado */
+#highlight-menu {
+    display: none;
+    position: absolute;
+    z-index: 50;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dark #highlight-menu {
+    background: #374151;
+}
+
+/* Restricción de selección para proteger el área de video */
+.video-container {
+    user-select: none;
+}
